@@ -74,4 +74,5 @@ void loop() {
   display.print(pressureKPA, 3); 
   display.println(F(" kPa"));
   display.display(); //Displaying the display
+  
 }
