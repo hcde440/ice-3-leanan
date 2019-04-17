@@ -21,8 +21,7 @@ Adafruit_MPL115A2 mpl115a2;
 // set up the 'pressure'feed
 AdafruitIO_Feed *pressure = io.feed("pressure");
 
-void setup() 
-{
+void setup() {
   Serial.begin(115200);
 
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C); //initailize with the i2c addre 0x3C
@@ -35,10 +34,25 @@ void setup()
   
   Serial.println("Getting barometric pressure ...");
   mpl115a2.begin();
+
+  // connect to io.adafruit.com
+  Serial.print("Connecting to Adafruit IO");
+  io.connect();
+
+  // wait for a connection
+  while(io.status() < AIO_CONNECTED) {
+    Serial.print(".");
+    delay(500);
+  }
+
+  // we are connected
+  Serial.println();
+  Serial.println(io.statusText());
 }
 
-void loop() 
-{
+void loop() {
+  io.run();  
+  
   float pressureKPA = 0, temperatureC = 0;    
 
   pressureKPA = mpl115a2.getPressure();  
