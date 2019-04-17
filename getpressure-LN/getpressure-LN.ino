@@ -16,33 +16,28 @@
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-#define LOGO_HEIGHT   16
-#define LOGO_WIDTH    16
-
-
 Adafruit_MPL115A2 mpl115a2;
 
 // set up the 'pressure'feed
 AdafruitIO_Feed *pressure = io.feed("pressure");
 
-void setup(void) 
+void setup() 
 {
-  Serial.begin(9600);
-
-  // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
-  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3C for 128x32
-    Serial.println(F("SSD1306 allocation failed"));
-    for(;;); // Don't proceed, loop forever
-  }
-  
   Serial.begin(115200);
-  Serial.println("Hello!");
+
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C); //initailize with the i2c addre 0x3C
+  display.clearDisplay();                    //Clears any existing images or text
+  display.setTextSize(1);                    //Set text size
+  display.setTextColor(WHITE);               //Set text color to white
+  display.setCursor(0,0);                    //Puts cursor on top left corner
+  display.println("Starting up...");         //Test and write up
+  display.display();                         //Displaying the display
   
   Serial.println("Getting barometric pressure ...");
   mpl115a2.begin();
 }
 
-void loop(void) 
+void loop() 
 {
   float pressureKPA = 0, temperatureC = 0;    
 
